@@ -112,10 +112,17 @@ LinkedList.prototype.printListInverse = function() {
  */
  LinkedList.prototype.deleteFront = function() {
     if (!this.head) {
-        return;
+        return null;
     }
+    if (!this.head.next) {
+        let deleted = this.head.data;
+        this.head = this.tail = null;
+        return deleted;
+    }
+    let deleted = this.head.data;
     this.head = this.head.next;
     this.head.previous = null;
+    return deleted;
 }
 
 /**
@@ -145,6 +152,9 @@ LinkedList.prototype.printListInverse = function() {
     if (!this.head) {
         return null;
     }
+    if (!this.head.next && index == 0) {
+        this.head = this.tail = null;
+    }
     if (index == 0) {
         this.head = this.head.next;
         this.head.previous = null;
@@ -167,7 +177,6 @@ LinkedList.prototype.printListInverse = function() {
 }
 
 module.exports = LinkedList;
-
 
 /*function main() {
     let list = new LinkedList();
