@@ -124,14 +124,17 @@ LinkedList.prototype.printListInverse = function() {
  */
  LinkedList.prototype.deleteEnd = function() {
     if (!this.head) {
-        return;
+        return null;
     }
     if (!this.head.next) {
+        let deleted = this.head.data;
         this.head = this.tail = null;
-        return;
+        return deleted;
     }
+    let deleted = this.tail.data;
     this.tail.previous.next = null;
     this.tail = this.tail.previous;
+    return deleted;
 }
 
 /**
@@ -163,8 +166,10 @@ LinkedList.prototype.printListInverse = function() {
     this.head = this.tail = null;
 }
 
+module.exports = LinkedList;
 
-function main() {
+
+/*function main() {
     let list = new LinkedList();
     // Inserting at beginning
     list.insertFront(30);
@@ -188,4 +193,4 @@ function main() {
     list.printListInverse();
 }
 
-main();
+main();*/

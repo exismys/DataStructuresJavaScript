@@ -148,7 +148,7 @@ LinkedList.prototype.deleteAll = function() {
     this.head = null;
 }
 
-function main() {
+/*function main() {
     let list = new LinkedList();
     // Inserting at beginning
     list.insertFront(30);
@@ -171,4 +171,4 @@ function main() {
     list.printList();
 }
 
-main();
+main();*/
