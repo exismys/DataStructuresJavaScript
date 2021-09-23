@@ -23,10 +23,11 @@ class BST {
  */
 BST.prototype.search = function(data) {
     let current = this.root;
-    let result = {found: false, parent: null};
+    let result = {found: false, parent: null, node: null};
     while (current) {
         if (data == current.data) {
             result.found = true;
+            result.node = current;
             break;
         } else if (data < current.data) {
             result.parent = current;
@@ -87,8 +88,52 @@ BST.prototype.postOrder = function(root = this.root) {
     }
 }
 
+/**
+ * @returns a node with minimum data
+ * Time complexity: O(n)
+ */
+BST.prototype.minimum = function(root = this.root) {
+    if (!root) return;
+    while (root.left) {
+        root = root.left;
+    }
+    return root;
+}
+
+/** 
+ * @returns a node with the maximum data
+ * Time complexity: O(n)
+ */
+BST.prototype.maximum = function(root = this.root) {
+    if (!root) return;
+    while (root.right) {
+        root = root.right;
+    }
+    return root;
+}
+
+/**
+ * Deletes a node from the tree
+ * Time Complexity: O(n)
+ */
+BST.prototype.delete = function(data) {
+    let result = this.search(data);
+    if (!result.found) return;
+    let side = result.parent.right == result.node ? "right" : "left";
+    if (!result.node.left && !result.node.right) result.parent[side] = null;
+    else if (!result.node.left) result.parent[side] = result.node.right;
+    else if (!result.node.right) result.parent[side] = result.node.left;
+    else {
+        let successor = this.minimum(result.node.right);
+        successor.left = result.node.left;
+        successor.right = result.node.right;
+        this.delete(successor.data);
+        result.parent[side] = successor;
+    }
+}
+
 // Test
-function main() {
+/*function main() {
     let bst = new BST();
     bst.insert(10);
     bst.insert(9);
@@ -97,6 +142,12 @@ function main() {
     bst.insert(25);
     bst.insert(1);
     bst.inOrder();
+    console.log('minimum: ' + bst.minimum().data);
+    console.log('maximum: ' + bst.maximum().data);
+    bst.delete(20);
+    bst.delete(1);
+    bst.delete(31);
+    bst.inOrder();
 }
 
-main();
+main();*/
