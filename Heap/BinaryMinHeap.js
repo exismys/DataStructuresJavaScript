@@ -19,7 +19,7 @@ class MinHeap {
 
 /**
  * Swaps two values in the underlying array
- * Time complexity: O(1)
+ * Time Complexity: O(1)
  */
 MinHeap.prototype.swap = function (index1, index2) {
   let temp = this.underlyingArray[index1];
@@ -29,7 +29,7 @@ MinHeap.prototype.swap = function (index1, index2) {
 
 /**
  * Inserts data into the heap
- * Time complexity: O(log(n))
+ * Time Complexity: O(log(n))
  */
 MinHeap.prototype.insert = function (data) {
   this.underlyingArray[this.size] = data;
@@ -45,9 +45,8 @@ MinHeap.prototype.insert = function (data) {
 
 /**
  * Heapify: Reshapes binary tree into the min heap
- * Time complexity: O(h), O(log(n))
+ * Time Complexity: O(h), O(log(n))
  */
-
 MinHeap.prototype.heapify = function (index) {
   let leftChild = this.leftChild(index);
   let rightChild = this.rightChild(index);
@@ -64,7 +63,7 @@ MinHeap.prototype.heapify = function (index) {
   }
 
   // if right child is the smallest
-  if (rightChild < this.size && rightValue < smallest) {
+  if (rightChild < this.size && rightValue < this.underlyingArray[smallest]) {
     smallest = rightChild;
   }
 
@@ -74,6 +73,10 @@ MinHeap.prototype.heapify = function (index) {
   }
 };
 
+/**
+ * @returns and remove minimum of heap
+ * Time Complexity: O(h), O(log(n))
+ */
 MinHeap.prototype.extractMin = function () {
   if (this.size <= 0) {
     return Infinity;
@@ -88,6 +91,42 @@ MinHeap.prototype.extractMin = function () {
   return this.underlyingArray[this.size];
 };
 
+/**
+ * Decreases the value at a given index to a given parameter
+ * Time Complexity: O(log(n))
+ */
+MinHeap.prototype.decreaseKey = function (index, data) {
+  this.underlyingArray[index] = data;
+  while (
+    index != 0 &&
+    this.underlyingArray[this.parent(index)] > this.underlyingArray[index]
+  ) {
+    this.swap(index, this.parent(index));
+    index = this.parent(index);
+  }
+};
+
+/**
+ * Deletes a value at given index
+ * Time Complexity: O(log(n))
+ */
+MinHeap.prototype.deleteKey = function (index) {
+  this.decreaseKey(index, -Infinity);
+  this.extractMin();
+};
+
+/**
+ * Build Heap: Builds a heap from a given array
+ * Time Complexity: O(n)
+ */
+MinHeap.prototype.buildHeap = function (array) {
+  this.underlyingArray = array;
+  this.size = array.length;
+  for (let i = this.parent(this.size - 1); i >= 0; i--) {
+    this.heapify(i);
+  }
+};
+
 function main() {
   let heap = new MinHeap();
   heap.insert(5);
@@ -96,7 +135,11 @@ function main() {
   console.log(heap.underlyingArray); // [3, 6, 5]
   console.log(heap.underlyingArray.toString()); // 3,6,5; joined each element with ','
   console.log(heap.extractMin()); // 3
-  console.log(heap.underlyingArray); // [5, 6, 3]; valid till index 1
+  console.log(heap.underlyingArray, heap.size); // [5, 6, 3]; valid till index 1
+  heap.deleteKey(1);
+  console.log(heap.underlyingArray, heap.size); // [5, -Infinity, 3]; valid till index 0
+  heap.buildHeap([1, 5, 2, 19, 3, 7, 6, 4]); // test failing
+  console.log(heap.underlyingArray, heap.size);
 }
 
 main();
